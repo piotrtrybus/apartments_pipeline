@@ -1,0 +1,25 @@
+prague_apartments:
+  outputs:
+   dev:
+      type: postgres
+      host: "{{ env_var('HOST') }}"
+      user: "{{ env_var('USER') }}"
+      password: "{{ env_var('PASSWORD') }}"
+      port: "{{ env_var('PORT') | int}}"
+      dbname: "{{ env_var('DATABASE') }}"
+      schema: "{{ env_var('SCHEMA', 'public') }}"
+      connect_timeout: 10
+      threads: 1
+      sslmode: require
+   prod:
+      type: postgres
+      host: "{{ env_var('HOST') }}"
+      user: "{{ env_var('PROD_USER') }}"
+      password: "{{ env_var('PROD_PASSWORD') }}"
+      port: "{{ env_var('PROD_PORT') | int}}"
+      dbname: "{{ env_var('PROD_DATABASE') }}"
+      schema: "{{ env_var('PROD_SCHEMA', 'public') }}"
+      connect_timeout: 10
+      threads: 1
+      sslmode: require
+  target: dev

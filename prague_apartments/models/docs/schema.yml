@@ -1,0 +1,136 @@
+models:
+  - name: bronze_prague_apartments
+    description: Raw data containing all property listings including a unique id and a timestamp.
+    columns:
+      - name: listing_id
+        description: '{{doc("listing_id") }}'
+        tests:
+          - generic_not_null
+      - name: property_title
+        description: '{{doc("property_title")}}'
+      - name: property_district
+        description: '{{doc("property_district")}}'
+      - name: listing_type
+        description: '{{doc("listing_type")}}'
+      - name: price_czk
+        description: '{{doc("price_czk")}}'
+      - name: area_m2
+        description: '{{doc("area_m2")}}'
+      - name: 'timestamp'
+        description: '{{doc("timestamp")}}'
+      - name: date
+        description: '{{doc("date")}}'
+      - name: row_number
+        description: 'Row number'
+
+  - name: silver_prague_apartments_for_rent
+    description: Cleaned and enriched table of listings filtered to only include rentals.
+    columns:
+    - name: listing_id
+      description: '{{doc("listing_id")}}'
+      tests:
+        - generic_not_null
+        - double_listings_rent
+    - name: property_title
+      description: '{{doc("property_title")}}'
+    - name: property_district
+      description: '{{doc("property_district")}}'
+    - name: listing_type
+      description: '{{doc("listing_type")}}'
+    - name: property_layout
+      description: '{{doc("property_layout")}}'
+    - name: price_czk
+      description: '{{doc("price_czk")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: rooms_without_kitchen
+      description: '{{doc("rooms_without_kitchen")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: date
+      description: '{{doc("date")}}'
+
+
+  - name: silver_prague_apartments_for_sale
+    description: Cleaned and enriched table of listings filtered to only include property for sale.
+    columns:
+    - name: listing_id
+      description: '{{doc("listing_id")}}'
+      tests:
+        - generic_not_null
+        - double_listings_sale
+    - name: property_title
+      description: '{{doc("property_title")}}'
+    - name: property_district
+      description: '{{doc("property_district")}}'
+    - name: property_layout
+      description: '{{doc("property_layout")}}'
+    - name: listing_type
+      description: '{{doc("listing_type")}}'
+    - name: price_czk
+      description: '{{doc("price_czk")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: rooms_without_kitchen
+      description: '{{doc("rooms_without_kitchen")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: date
+      description: '{{doc("date")}}'
+
+
+  - name: gold_rental_avg_per_district
+    description: Aggregated data to display average metrics for rental apartments depending on the district.
+    columns:
+    - name: property_district
+      description: '{{doc("property_district")}}'
+      tests:
+        - generic_not_null
+    - name: avg_rent_czk
+      description: '{{doc("avg_price_czk")}}'
+    - name: avg_area_m2
+      description: '{{doc("avg_area_m2")}}'
+    - name: avg_rooms_without_kitchen
+      description: '{{doc("avg_rooms_without_kitchen")}}'
+
+
+  - name: gold_sale_avg_per_district
+    description: Aggregated data to display average metrics for sale apartments depending on the district.
+    columns:
+    - name: property_district
+      description: '{{doc("property_district")}}'
+      tests:
+        - generic_not_null
+    - name: avg_price_czk
+      description: '{{doc("avg_price_czk")}}'
+    - name: avg_area_m2
+      description: '{{doc("avg_area_m2")}}'
+    - name: avg_rooms_without_kitchen
+      description: '{{doc("rooms_without_kitchen")}}'
+
+
+  - name: gold_rental_avg_per_layout
+    description: Aggregated data to display average metrics rental apartments depending on the layout.
+    columns:
+    - name: property_layout
+      description: '{{doc("property_layout")}}'
+      tests:
+        - generic_not_null
+    - name: avg_rent_czk
+      description: '{{doc("avg_price_czk")}}'
+    - name: avg_area_m2
+      description: '{{doc("avg_area_m2")}}'
+
+
+  - name: gold_sale_avg_per_layout
+    description: Aggregated data to display average metrics for sale apartments depending on the layout.
+    columns:
+    - name: property_layout
+      description: '{{doc("property_layout")}}'
+      tests:
+        - generic_not_null
+    - name: avg_rent_czk
+      description: '{{doc("avg_price_czk")}}'
+    - name: avg_area_m2
+      description: '{{doc("avg_area_m2")}}'
+

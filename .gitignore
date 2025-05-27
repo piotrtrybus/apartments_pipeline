@@ -1,0 +1,28 @@
+# Main
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+.env
+**/.env
+
+# DBT
+prague_apartments/target/
+prague_apartments/dbt_packages/
+prague_apartments/logs/
+
+# Streamlit
+./visualisation
+*.db
+*.log
+
+# VS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Misc
+*.egg-info/

@@ -1,0 +1,27 @@
+name: 'prague_apartments'
+version: '1.0.0'
+
+profile: 'prague_apartments'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:  
+  - "target"
+  - "dbt_packages"
+
+models:
+  prague_apartments:
+    bronze:
+      +materialized: ephemeral
+    silver:
+      +materialized: view
+    gold:
+      +materialized: table
+
+tests:
+  +store_failures: true
