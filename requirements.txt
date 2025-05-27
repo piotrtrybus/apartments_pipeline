@@ -34,7 +34,7 @@ msgpack==1.1.0
 narwhals==1.41.0
 networkx==3.4.2
 numpy==1.26.4
-packaging==24.2
+packaging>=21.0,<24
 pandas==2.2.2
 streamlit==1.32.2
 greenlet==3.0.3
