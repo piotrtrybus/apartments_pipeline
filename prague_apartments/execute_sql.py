@@ -15,7 +15,7 @@ conn_info = {
 }
 
 prod_conn_info = {
-    "host": os.getenv("PROD_HOST"),
+    "host": os.getenv("HOST"),
     "port": os.getenv("PROD_PORT"),
     "dbname": os.getenv("PROD_DATABASE"),
     "user": os.getenv("PROD_USER"),
