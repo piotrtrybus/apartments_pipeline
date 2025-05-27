@@ -42,7 +42,7 @@ altair==5.1.2
 python-dotenv==1.0.1
 parsedatetime==2.6
 pathspec==0.11.2
-pillow==11.2.1
+pillow>=9.0,<11
 playwright==1.32.0
 protobuf==6.31.0
 psycopg2-binary==2.9.10
