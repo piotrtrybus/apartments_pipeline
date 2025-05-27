@@ -17,6 +17,7 @@ prague_apartments/logs/
 ./visualisation
 *.db
 *.log
+.streamlit/secrets.toml
 
 # VS
 .vscode/

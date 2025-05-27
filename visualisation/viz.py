@@ -7,14 +7,7 @@ import psycopg2
 
 load_dotenv(dotenv_path="/prague_apartments/.env")
 
-prod_conn_info = {
-    "host": os.getenv("HOST"),
-    "port": os.getenv("PROD_PORT"),
-    "dbname": os.getenv("PROD_DATABASE"),
-    "user": os.getenv("PROD_USER"),
-    "password": os.getenv("PROD_PASSWORD"),
-    "sslmode": "require"  
-}
+prod_conn_info = st.secrets["prod_conn_info"]
 
 with psycopg2.connect(**prod_conn_info) as conn:
     with conn.cursor() as cur:
