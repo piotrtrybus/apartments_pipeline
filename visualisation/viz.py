@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 
-load_dotenv(dotenv_path="../prague_apartments/.env")
+load_dotenv(dotenv_path="/prague_apartments/.env")
 
 prod_conn_info = {
     "host": os.getenv("HOST"),
