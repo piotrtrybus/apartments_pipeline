@@ -32,5 +32,9 @@ Tech Stack:
 - **Metadata**: dbt docs
 - **Visualisation:** Streamlit & Altair
 
-DBT Lineage:
+**DBT Lineage:**
 ![Lineage](lineage.png)
+
+**ELT process:** Runs daily at 6 AM UTC
+![ELT](elt.png)
+
