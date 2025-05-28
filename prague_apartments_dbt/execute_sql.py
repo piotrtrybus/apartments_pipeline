@@ -15,7 +15,7 @@ conn_info = {
 }
 
 prod_conn_info = {
-    "host": os.getenv("HOST"),
+    "host": os.getenv("PROD_HOST"),
     "port": os.getenv("PROD_PORT"),
     "dbname": os.getenv("PROD_DATABASE"),
     "user": os.getenv("PROD_USER"),
@@ -23,7 +23,6 @@ prod_conn_info = {
     "sslmode": "require"  
 }
 
-db_path = os.path.join(os.path.dirname(__file__), "..", "data", "temp3_prague_apartments.db")
 csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "prague_apartments.csv")
 
 df = pd.read_csv(csv_path)
@@ -31,11 +30,12 @@ df = pd.read_csv(csv_path)
 
 sql_create_postgres = '''
 
---drop table prague_apartments;
+drop table prague_apartments cascade;
 
 create table if not exists prague_apartments(
     eventid VARCHAR,
     title VARCHAR,
+    link VARCHAR,
     location VARCHAR,
     district VARCHAR,
     property_type VARCHAR,
@@ -84,20 +84,6 @@ with psycopg2.connect(**conn_info) as conn:
     with conn.cursor() as cur:
         cur.execute(sql_create_postgres)
 
-        for _, row in df.iterrows():
-            cur.execute(sql_insert_postgres, (
-                row["eventid"],
-                row["title"],
-                row["location"],
-                row["district"],
-                row["property_type"],
-                row["price_czk"],
-                row["layout"],
-                row["area_m2"],
-                row["timestamp"]
-            ))
-
-        print("Insert complete!")
 
         cur.execute(sql_check_postgres)
         df = cur.fetchall()

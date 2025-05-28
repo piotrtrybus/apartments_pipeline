@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 from playwright.sync_api import sync_playwright
 import pandas as pd
 from time import sleep
@@ -14,8 +15,8 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("scraper.log"),
-        logging.StreamHandler()
+        logging.FileHandler("elt.log", encoding="utf-8"),
+        logging.StreamHandler(sys.stdout)
     ]
 )
 
@@ -56,13 +57,18 @@ def scrape_data():
             logger.info("Proceeded through consent page")
 
         def extract_apartments():
-            apartments = page.query_selector_all("div.css-18g5ywv")
-            logger.info(f"{len(apartments)} Apartments fetched")
+            page.wait_for_selector("li[id^='estate-list-item']")
+            apartments = page.locator("li[id^='estate-list-item']")
+            count = apartments.count()
+            logger.info(f"{count} apartments found")
 
-            for apartment in apartments:
-                title = apartment.query_selector("p.css-d7upve:nth-child(1)").text_content()
-                location = apartment.query_selector("p.css-d7upve:nth-child(2)").text_content()
-                price = apartment.query_selector("p.css-ca9wwd").text_content()
+            for i in range(count):
+                apartment = apartments.nth(i)
+                title = apartment.locator("p").nth(0).text_content()
+                location = apartment.locator("p").nth(1).text_content()
+                price = apartment.locator("p:has-text('Kč')").text_content()
+                link = apartment.locator("a[href*='/detail/']")
+                href = link.get_attribute("href")
                 #Initiate variables
                 layout = None
                 type = None
@@ -72,7 +78,6 @@ def scrape_data():
                     type = 'For Rent'
                     match_price = re.search(r"(\d+\s?\d+)", price)
 
-                    
                     if match_price:
                         price = match_price.group().replace("\xa0", "").replace(" ", "")
                     else:
@@ -123,6 +128,7 @@ def scrape_data():
                 data.append({
                     "eventid": generate_id(title,location,type),
                     "title": title,
+                    "link": "https://www.sreality.cz/"+href,
                     "location": location,
                     "district": district,
                     "property_type": type,
@@ -132,34 +138,34 @@ def scrape_data():
                     "timestamp": datetime.now()
                 })
                 
-                logger.info("Data appeneded.")
+                logger.info(f"Data appeneded:{title} | {location} | {price}")
                     
         
 
         page_number = 0
 
-        while True:
-            page_number += 1
-            logger.info(f"Scraping page {page_number}")
-
-            extract_apartments()
-            logger.info("Apartments extracted")
+        #while True:
+        #    page_number += 1
+        #    logger.info(f"Scraping page {page_number}")
+        #
+        extract_apartments()
+            #logger.info("Apartments extracted")
             
-            try:
-                next_page_button = page.locator("button",has_text="Další stránka")
-                next_page_button = page.locator("button",has_text="Další stránka")
-                next_page_button.wait_for(state="visible")
-                next_page_button.scroll_into_view_if_needed()
-
-                if next_page_button.is_visible():    
-                    next_page_button.click(force=True)
-                    page.wait_for_timeout(2000)
-                else:
-                    logger.warning("No more pages to scrape - exiting loop.")
-                    break
-            except:
-                logger.warning("No more pages to scrape. Stopping")
-                break
+            #try:
+            #    next_page_button = page.locator("button",has_text="Další stránka")
+            #    next_page_button = page.locator("button",has_text="Další stránka")
+            #    next_page_button.wait_for(state="visible")
+            #    next_page_button.scroll_into_view_if_needed()
+            #
+            #    if next_page_button.is_visible():    
+            #        next_page_button.click(force=True)
+            #        page.wait_for_timeout(2000)
+            #    else:
+            #        logger.warning("No more pages to scrape - exiting loop.")
+            #        break
+            #except:
+            #    logger.warning("No more pages to scrape. Stopping")
+            #    break
 
         browser.close()
 
@@ -182,5 +188,6 @@ def main():
     scrape_data()
     save_data()
 
-main()
+if __name__ == "__main__":
+    main()
 

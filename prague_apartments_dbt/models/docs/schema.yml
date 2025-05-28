@@ -8,6 +8,8 @@ models:
           - generic_not_null
       - name: property_title
         description: '{{doc("property_title")}}'
+      - name: listing_link
+        description: '{{doc("listing_link")}}'
       - name: property_district
         description: '{{doc("property_district")}}'
       - name: listing_type
@@ -33,6 +35,8 @@ models:
         - double_listings_rent
     - name: property_title
       description: '{{doc("property_title")}}'
+    - name: listing_link
+      description: '{{doc("listing_link")}}'
     - name: property_district
       description: '{{doc("property_district")}}'
     - name: listing_type
@@ -61,6 +65,8 @@ models:
         - double_listings_sale
     - name: property_title
       description: '{{doc("property_title")}}'
+    - name: listing_link
+      description: '{{doc("listing_link")}}'
     - name: property_district
       description: '{{doc("property_district")}}'
     - name: property_layout

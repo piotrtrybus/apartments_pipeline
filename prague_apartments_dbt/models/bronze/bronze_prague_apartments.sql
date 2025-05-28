@@ -2,6 +2,7 @@ with numbered_listings as(
     select 
     eventid as listing_id,
     title as property_title,
+    link as listing_link,
     district as property_district,
     property_type as listing_type,
     regexp_replace(price_czk, '[^0-9]', '', 'g')::BIGINT as price_czk,

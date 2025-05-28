@@ -14,6 +14,10 @@ The district of Prague in which the property is located
 Type of listings: Rental or Sale
 {% enddocs %}
 
+{% docs listing_link %}
+Link to the listing on sreality.cz.
+{% enddocs %}
+
 {% docs price_czk %}
 Price of the property: monthly rent or purchase price in Czech Crowns.
 {% enddocs %}
