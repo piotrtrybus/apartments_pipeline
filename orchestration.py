@@ -65,4 +65,10 @@ def run_elt():
     remove_csv()
 
 if __name__ == "__main__":
-    run_elt()
+    run_elt.deploy(
+        name="prague-apartments-pipeline",
+        work_pool_name="prague-apartments-pipeline",
+        image="prefecthq/prefect-client:3-python3.11",
+        push=False,
+        cron="0 6 * * *",
+    )

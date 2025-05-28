@@ -25,7 +25,7 @@ Final datasets are visualized with Streamlit and Altair.
 
 Tech Stack:
 - **Scraping:** Playwright
-- **Orchestration:** GitHub Actions
+- **Orchestration:** Prefect (as Airflow alternative)
 - **Transformation:** dbt + Postgres
 - **Databases:** Heroku Postgres (Dev + Prod)
 - **Logging**: Python logging module
