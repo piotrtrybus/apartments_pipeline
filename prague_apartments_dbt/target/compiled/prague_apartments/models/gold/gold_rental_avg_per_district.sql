@@ -4,7 +4,7 @@ select
     cast(round(avg(area_m2)::numeric,0) as float) avg_area_m2,
     cast(round(avg(rooms_without_kitchen)::numeric,1) as float) avg_rooms_without_kitchen
 
-from "d8tltfgi9rccg8"."public"."silver_prague_apartments_for_rent"
+from "dfrcqf3u6sgd77"."public"."silver_prague_apartments_for_rent"
 
 group by 1
 

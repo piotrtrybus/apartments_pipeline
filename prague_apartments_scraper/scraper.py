@@ -26,12 +26,15 @@ logger = logging.getLogger(__name__)
 url = "https://www.sreality.cz/hledani/byty/praha"
 csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prague_apartments.csv")
 
-data = []
-
 #Unique ID per listing generator
 def generate_id(*args):
     raw = "||".join(str(arg).strip().lower() for arg in args if arg)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
+
+
+def append_data_to_csv(row):
+    df = pd.DataFrame(row)
+    df.to_csv(csv_file_path, mode='a', header=not os.path.isfile(csv_file_path), index=False)
 
 
 def scrape_data():
@@ -66,7 +69,15 @@ def scrape_data():
                 apartment = apartments.nth(i)
                 title = apartment.locator("p").nth(0).text_content()
                 location = apartment.locator("p").nth(1).text_content()
-                price = apartment.locator("p:has-text('Kč')").text_content()
+                kc_regex = re.compile("kč", re.IGNORECASE)
+                price_locator = apartment.locator("p", has_text=kc_regex)
+
+                if price_locator.count() > 0:
+                    price = price_locator.text_content()
+                else:
+                    logger.warning("Price element not found — skipping listing")
+                    continue
+                
                 link = apartment.locator("a[href*='/detail/']")
                 href = link.get_attribute("href")
                 #Initiate variables
@@ -125,7 +136,7 @@ def scrape_data():
                         area = None
 
 
-                data.append({
+                row = {
                     "eventid": generate_id(title,location,type),
                     "title": title,
                     "link": "https://www.sreality.cz/"+href,
@@ -136,57 +147,43 @@ def scrape_data():
                     "layout": layout,
                     "area_m2": area,
                     "timestamp": datetime.now()
-                })
+                }
                 
+                append_data_to_csv([row])
                 logger.info(f"Data appeneded:{title} | {location} | {price}")
-                    
         
 
         page_number = 0
 
-        #while True:
-        #    page_number += 1
-        #    logger.info(f"Scraping page {page_number}")
-        #
-        extract_apartments()
-            #logger.info("Apartments extracted")
+        while True:
+            page_number += 1
+            logger.info(f"Scraping page {page_number}")
+        
+            extract_apartments()
+            logger.info("Apartments extracted")
             
-            #try:
-            #    next_page_button = page.locator("button",has_text="Další stránka")
-            #    next_page_button = page.locator("button",has_text="Další stránka")
-            #    next_page_button.wait_for(state="visible")
-            #    next_page_button.scroll_into_view_if_needed()
-            #
-            #    if next_page_button.is_visible():    
-            #        next_page_button.click(force=True)
-            #        page.wait_for_timeout(2000)
-            #    else:
-            #        logger.warning("No more pages to scrape - exiting loop.")
-            #        break
-            #except:
-            #    logger.warning("No more pages to scrape. Stopping")
-            #    break
+            try:
+                next_page_button = page.locator("button",has_text="Další stránka")
+                next_page_button.wait_for(state="visible")
+                next_page_button.scroll_into_view_if_needed()
+            
+                if next_page_button.is_visible():    
+                    next_page_button.click(force=True)
+                    page.wait_for_timeout(2000)
+                else:
+                    logger.warning("No more pages to scrape - exiting loop.")
+                    break
+            except:
+                logger.warning("No more pages to scrape. Stopping")
+                break
 
         browser.close()
 
-
-
-def save_data():
-    # Check if the file exists to determine if the header should be written
-    file_exists = os.path.isfile(csv_file_path)
-    
-    if data:
-        df = pd.DataFrame(data)
-        df.to_csv(csv_file_path, mode='a', header=not file_exists, index=False)
-        logger.info(f"Data saved to CSV. Total rows: {len(df)}")
-    else:
-        logger.error("No data, save skipped")
  
 
 
 def main():
     scrape_data()
-    save_data()
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
 
 
-depends_on: "d8tltfgi9rccg8"."public"."silver_prague_apartments_for_rent"
+depends_on: "dfrcqf3u6sgd77"."public"."silver_prague_apartments_for_rent"
 
 select 
     listing_id,
     count(distinct listing_id)
 
-from "d8tltfgi9rccg8"."public"."silver_prague_apartments_for_rent"
+from "dfrcqf3u6sgd77"."public"."silver_prague_apartments_for_rent"
 
 group by 1
 

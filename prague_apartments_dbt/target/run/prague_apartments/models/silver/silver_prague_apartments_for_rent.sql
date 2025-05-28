@@ -1,5 +1,5 @@
 
-  create view "d8tltfgi9rccg8"."public"."silver_prague_apartments_for_rent__dbt_tmp"
+  create view "dfrcqf3u6sgd77"."public"."silver_prague_apartments_for_rent__dbt_tmp"
     
     
   as (
@@ -8,6 +8,7 @@ with numbered_listings as(
     select 
     eventid as listing_id,
     title as property_title,
+    link as listing_link,
     district as property_district,
     property_type as listing_type,
     regexp_replace(price_czk, '[^0-9]', '', 'g')::BIGINT as price_czk,

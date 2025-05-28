@@ -2,7 +2,7 @@
   
     
 
-  create  table "d8tltfgi9rccg8"."public"."gold_sale_avg_per_layout__dbt_tmp"
+  create  table "dfrcqf3u6sgd77"."public"."gold_sale_avg_per_layout__dbt_tmp"
   
   
     as
@@ -13,7 +13,7 @@
     cast(round(avg(price_czk)::numeric,0) as float) avg_price_czk,
     cast(round(avg(area_m2)::numeric,1) as float) avg_area_m2
 
-from "d8tltfgi9rccg8"."public"."silver_prague_apartments_for_sale"
+from "dfrcqf3u6sgd77"."public"."silver_prague_apartments_for_sale"
 
 group by 1
 

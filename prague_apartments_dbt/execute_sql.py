@@ -15,7 +15,7 @@ conn_info = {
 }
 
 prod_conn_info = {
-    "host": os.getenv("PROD_HOST"),
+    "host": os.getenv("HOST"),
     "port": os.getenv("PROD_PORT"),
     "dbname": os.getenv("PROD_DATABASE"),
     "user": os.getenv("PROD_USER"),
@@ -80,7 +80,7 @@ select price_czk from prague_apartments;
 '''
 
 #Postgres con
-with psycopg2.connect(**conn_info) as conn:
+with psycopg2.connect(**prod_conn_info) as conn:
     with conn.cursor() as cur:
         cur.execute(sql_create_postgres)
 

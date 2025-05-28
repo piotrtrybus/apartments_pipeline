@@ -3,6 +3,7 @@ with numbered_listings as(
     select 
     eventid as listing_id,
     title as property_title,
+    link as listing_link,
     district as property_district,
     property_type as listing_type,
     regexp_replace(price_czk, '[^0-9]', '', 'g')::BIGINT as price_czk,
@@ -21,6 +22,7 @@ where row_number = 1
 ) select
     cast(listing_id as varchar) listing_id,
     cast(property_title as varchar) property_title,
+    cast(listing_link as varchar) listing_link,
     cast(property_district as varchar) property_district,
     cast(price_czk as bigint) price_czk,
     cast(property_layout as varchar) property_layout,
