@@ -140,3 +140,34 @@ models:
     - name: avg_area_m2
       description: '{{doc("avg_area_m2")}}'
 
+  - name: gold_full_listings
+    description: All listings Sale + Rental unioned.
+    columns:
+    - name: listing_id
+      description: '{{doc("listing_id")}}'
+      tests:
+        - generic_not_null
+        - double_listings_rent
+    - name: property_title
+      description: '{{doc("property_title")}}'
+    - name: listing_link
+      description: '{{doc("listing_link")}}'
+    - name: property_district
+      description: '{{doc("property_district")}}'
+    - name: listing_type
+      description: '{{doc("listing_type")}}'
+    - name: property_layout
+      description: '{{doc("property_layout")}}'
+    - name: price_czk
+      description: '{{doc("price_czk")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: rooms_without_kitchen
+      description: '{{doc("rooms_without_kitchen")}}'
+    - name: area_m2
+      description: '{{doc("area_m2")}}'
+    - name: listing_type
+      description: '{{doc("listing_type")}}'
+    - name: date
+      description: '{{doc("date")}}'
+

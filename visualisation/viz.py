@@ -4,9 +4,9 @@ import pandas as pd
 import os
 import psycopg2
 
-prod_conn_info = st.secrets["prod_conn_info"]
+conn_dict = dict(st.secrets["prod_conn_info"])
 
-with psycopg2.connect(**prod_conn_info) as conn:
+with psycopg2.connect(**conn_dict) as conn:
     with conn.cursor() as cur:
         st.header("Prague Apartment Rentals")
         st.subheader("Rent per District (Top 15)")
@@ -99,3 +99,57 @@ with psycopg2.connect(**prod_conn_info) as conn:
         )
 
         st.altair_chart(bar + labels, use_container_width=True)
+
+
+        st.header("Explore All Listings")
+        st.markdown("Use filters in the sidebar to narrow results by district, layout, price, or area.")
+
+        with st.spinner("Loading detailed listings..."):
+            df_full = pd.read_sql_query("SELECT * FROM gold_full_listings", conn)
+
+        with st.sidebar:
+            st.header("🧭 Filter Listings")
+
+            districts = ["All"] + sorted(df_full["property_district"].dropna().unique())
+            layouts = ["All"] + sorted(df_full["property_layout"].dropna().unique())
+
+            selected_district = st.selectbox("District", districts)
+            selected_layout = st.selectbox("Layout", layouts)
+
+            price_min, price_max = int(df_full["price_czk"].min()), int(df_full["price_czk"].max())
+            price_range = st.slider("Price Range (CZK)", price_min, price_max, (25000, 80000), step=1000)
+
+            min_area = st.number_input("Min Area (m²)", value=30)
+
+        df_filtered = df_full.copy()
+
+        if selected_district != "All":
+            df_filtered = df_filtered[df_filtered["property_district"] == selected_district]
+
+        if selected_layout != "All":
+            df_filtered = df_filtered[df_filtered["property_layout"] == selected_layout]
+
+        df_filtered = df_filtered[
+            (df_filtered["price_czk"] >= price_range[0]) &
+            (df_filtered["price_czk"] <= price_range[1]) &
+            (df_filtered["area_m2"] >= min_area)
+        ]
+
+        df_filtered["Listing"] = df_filtered.apply(
+            lambda row: f"[{row['property_title']}]({row['property_link']})", axis=1
+        )
+
+        display_cols = {
+            "Listing": "Listing",
+            "price_czk": "Price (CZK)",
+            "area_m2": "Area (m²)",
+            "property_layout": "Layout",
+            "property_district": "District",
+            "listing_date": "Date"
+        }
+
+        df_display = df_filtered[list(display_cols.keys())].rename(columns=display_cols)
+
+        st.write(f"Showing {len(df_display)} matching listings.")
+        st.write(df_display.to_markdown(index=False), unsafe_allow_html=True)
+

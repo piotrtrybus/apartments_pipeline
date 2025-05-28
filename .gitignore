@@ -12,12 +12,13 @@ venv/
 prague_apartments/target/
 prague_apartments/dbt_packages/
 prague_apartments/logs/
+prague_apartments_dbt/target/
 
 # Streamlit
 ./visualisation
 *.db
 *.log
-.streamlit/secrets.toml
+visualisation/.streamlit/secrets.toml
 
 # VS
 .vscode/

@@ -23,9 +23,9 @@ prod_conn_info = {
     "sslmode": "require"  
 }
 
-csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "prague_apartments.csv")
+#csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "prague_apartments.csv")
 
-df = pd.read_csv(csv_path)
+#df = pd.read_csv(csv_path)
 
 
 sql_create_postgres = '''
@@ -75,17 +75,13 @@ insert into prague_apartments (
 
 sql_check_postgres = '''
 
-select price_czk from prague_apartments;
-
+select * from prague_apartments
 '''
 
 #Postgres con
-with psycopg2.connect(**prod_conn_info) as conn:
+with psycopg2.connect(**conn_info) as conn:
     with conn.cursor() as cur:
-        cur.execute(sql_create_postgres)
-
-
-        cur.execute(sql_check_postgres)
+        df = cur.execute(sql_check_postgres)
         df = cur.fetchall()
         print(df)
-        cur.execute(sql_create_postgres)
+    
