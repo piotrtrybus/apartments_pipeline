@@ -58,9 +58,14 @@ def scrape_data():
             consent.click(force=True) #Proceed to listings
             page.wait_for_timeout(2000)
             logger.info("Proceeded through consent page")
-
+        
         def extract_apartments():
-            page.wait_for_selector("li[id^='estate-list-item']")
+            for i in range(5):
+                if page.locator("li[id^='estate-list-item']").first.is_visible():
+                    break
+                else:
+                    logger.warning("Listings not visible after multiple attempts.")
+                    return
             apartments = page.locator("li[id^='estate-list-item']")
             count = apartments.count()
             logger.info(f"{count} apartments found")
@@ -69,13 +74,12 @@ def scrape_data():
                 apartment = apartments.nth(i)
                 title = apartment.locator("p").nth(0).text_content()
                 location = apartment.locator("p").nth(1).text_content()
-                kc_regex = re.compile("kč", re.IGNORECASE)
-                price_locator = apartment.locator("p", has_text=kc_regex)
+                price_locator = apartment.locator("p", has_text="Kč")
 
                 if price_locator.count() > 0:
                     price = price_locator.text_content()
                 else:
-                    logger.warning("Price element not found — skipping listing")
+                    logger.warning("Price not available: skipping listing")
                     continue
                 
                 link = apartment.locator("a[href*='/detail/']")
@@ -182,9 +186,9 @@ def scrape_data():
  
 
 
-def main():
+def scrape_apartments():
     scrape_data()
 
 if __name__ == "__main__":
-    main()
+    scrape_apartments()
 
