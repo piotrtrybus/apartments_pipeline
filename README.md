@@ -12,9 +12,9 @@ Apartment data is scraped using Playwright and saved to a raw CSV file.
 **2. Data Transformation (ELT)**
 CSV is ingested into Postgres ing dbt.
 Follows the medallion architecture:
-- Bronze: raw → cleaned + deduplicated + atypical listings flagged
-- Silver: enriched + split by listing type
-- Gold: analytics-ready tables (4 models)
+- **Bronze:** raw → cleaned + deduplicated + atypical listings flagged
+- **Silver:** enriched + split by listing type
+- **Gold:** analytics-ready tables (4 models)
   
 Includes schema management, Jinja templating, and tests via dbt.
 
@@ -25,7 +25,7 @@ Final datasets are visualized with Streamlit and Altair.
     - Listings Exploration using sidebar filters
     - Market Analytics with bar charts about real estate market.
 
-Tech Stack:
+**Tech Stack:**
 - **Scraping:** Playwright
 - **Orchestration:** Prefect (as Airflow alternative)
 - **Transformation:** dbt
