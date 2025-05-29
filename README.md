@@ -1,6 +1,6 @@
 **Prague Apartments Analytics**
 
-This project consists a lightweight data pipeline for collecting, transforming, and visualizing apartment listings in Prague from sreality.cz.
+This project consists of a lightweight, full-stack data pipeline for collecting, transforming, and visualizing apartment listings in Prague from sreality.cz.
 
 **Streamlit**
 
@@ -22,11 +22,13 @@ Databases: Hosted on Heroku. 1 for development, 1 for production
 
 **3.Visualization**
 Final datasets are visualized with Streamlit and Altair.
+    - Listings Exploration using sidebar filters
+    - Market Analytics with bar charts about real estate market.
 
 Tech Stack:
 - **Scraping:** Playwright
 - **Orchestration:** Prefect (as Airflow alternative)
-- **Transformation:** dbt + Postgres
+- **Transformation:** dbt
 - **Databases:** Heroku Postgres (Dev + Prod)
 - **Logging**: Python logging module
 - **Metadata**: dbt docs
@@ -35,6 +37,12 @@ Tech Stack:
 **DBT Lineage:**
 ![Lineage](lineage.png)
 
-**ELT process:** Runs daily at 6 AM UTC
+**ELT process:** 
+- Runs daily at 6 AM UTC
+- Consists of 4 tasks: 
+    1. Extract (Web Scraping)
+    2. Load (Upload to Postgres)
+    3. Transform (Execute DBT models)
+    4. Delete CSV file from memory.
 ![ELT](elt.png)
 
