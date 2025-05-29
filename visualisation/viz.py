@@ -8,7 +8,7 @@ conn_dict = dict(st.secrets["prod_conn_info"])
 
 with psycopg2.connect(**conn_dict) as conn:
 
-    tab2, tab1 = st.tabs([ "Explore Listings","Prague Real Estate Analytics"])
+    tab2, tab1 = st.tabs([ "Explore Listings","Real Estate Analytics"])
 
     with tab1:
         with conn.cursor() as cur:
