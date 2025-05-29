@@ -104,7 +104,7 @@ with psycopg2.connect(**conn_dict) as conn:
             st.altair_chart(bar + labels, use_container_width=True)
 
         with tab2:
-            st.header("Explore Apartment Listings")
+            st.header("Explore Prague Apartment Listings")
             st.markdown("Use the sidebar to filter results. Visit Analytics tab for a market overview.")
 
             with st.spinner("Loading detailed listings..."):
