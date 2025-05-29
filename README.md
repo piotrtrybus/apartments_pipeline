@@ -14,7 +14,7 @@ CSV is ingested into Postgres ing dbt.
 Follows the medallion architecture:
 - **Bronze:** raw → cleaned + deduplicated + atypical listings flagged
 - **Silver:** enriched + split by listing type
-- **Gold:** analytics-ready tables (4 models)
+- **Gold:** analytics ready tables (4 models)
   
 Includes schema management, Jinja templating, and tests via dbt.
 
@@ -35,7 +35,7 @@ Final datasets are visualized with Streamlit and Altair.
 - **Visualisation:** Streamlit & Altair
 
 **DBT Lineage:**
-![Lineage](lineage.png)
+![Lineage](/media/lineage.png)
 
 **ELT process:** 
 - Runs daily at 6 AM UTC
@@ -45,5 +45,5 @@ Final datasets are visualized with Streamlit and Altair.
 3. Transform (Execute DBT models)
 4. Delete CSV file from memory.
 
-![ELT](elt.png)
+![ELT](/media/elt.png)
 
