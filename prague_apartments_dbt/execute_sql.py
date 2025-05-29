@@ -76,7 +76,7 @@ insert into prague_apartments (
 
 sql_check_postgres = '''
 
-select * from prague_apartments
+select  count(*) from silver_prague_apartments_for_rent
 '''
 
 #Postgres con

@@ -66,7 +66,7 @@ def copy_csv_to_postgres(csv_path, table_name, conn_info):
 
 def load_data():
     csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "prague_apartments.csv")
-    conn_info = get_connection_info(use_prod=False)
+    conn_info = get_connection_info(use_prod=True)
     copy_csv_to_postgres(csv_path, "prague_apartments", conn_info)
 
 if __name__ == "__main__":
