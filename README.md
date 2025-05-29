@@ -40,9 +40,10 @@ Tech Stack:
 **ELT process:** 
 - Runs daily at 6 AM UTC
 - Consists of 4 tasks: 
-    1. Extract (Web Scraping)
-    2. Load (Upload to Postgres)
-    3. Transform (Execute DBT models)
-    4. Delete CSV file from memory.
+1. Extract (Web Scraping)
+2. Load (Upload to Postgres)
+3. Transform (Execute DBT models)
+4. Delete CSV file from memory.
+
 ![ELT](elt.png)
 
