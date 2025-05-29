@@ -76,13 +76,12 @@ insert into prague_apartments (
 
 sql_check_postgres = '''
 
-select  count(*) from silver_prague_apartments_for_rent
+select * from gold_rental_avg_per_district order by avg_rent_czk desc limit 15
 '''
 
 #Postgres con
-with psycopg2.connect(**conn_info) as conn:
+with psycopg2.connect(**prod_conn_info) as conn:
     with conn.cursor() as cur:
-        df = cur.execute(sql_check_postgres)
-        df = cur.fetchall()
+        df = pd.read_sql_query("select * from gold_rental_avg_per_district order by avg_rent_czk desc limit 15", conn)
         print(df)
     
