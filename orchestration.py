@@ -32,20 +32,6 @@ def load():
 
 
 @task
-def load_env_from_dotenv():
-    command = '''
-    Get-Content .env | ForEach-Object {
-        if ($_ -match "^\s*([^#][^=]+)=(.+)$") {
-            $name = $matches[1].Trim()
-            $value = $matches[2].Trim('"').Trim()
-            [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
-        }
-    }
-    '''
-    subprocess.run(["powershell", "-Command", command], check=True)
-
-
-@task
 def transform():
     load_dotenv(dotenv_path="../prague_apartments_dbt/.env", override=True)
     logger.info("Initiating the DBT execution")
@@ -72,10 +58,9 @@ def remove_csv():
 @flow
 def run_elt():
     extract()
-    load_env_from_dotenv()
     load()
     transform()
-    #remove_csv()
+    remove_csv()
 
 if __name__ == "__main__":
-    run_elt.serve(name="prague-apartments-pipeline", cron="0 6 * * *")
+    run_elt.serve(name="prague-apartments-pipeline-new", cron="0 6 * * *")
