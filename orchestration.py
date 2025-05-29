@@ -1,6 +1,6 @@
 from prague_apartments_scraper.scraper import scrape_apartments
 from prague_apartments_ingestion.loader import load_data
-from prefect import flow, task
+from prefect import flow, task, get_run_logger
 from dotenv import load_dotenv
 import subprocess
 import logging
