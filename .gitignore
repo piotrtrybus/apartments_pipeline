@@ -7,12 +7,14 @@ venv/
 .venv/
 .env
 **/.env
+apartments_pipeline-main/
 
 # DBT
 prague_apartments/target/
 prague_apartments/dbt_packages/
 prague_apartments/logs/
 prague_apartments_dbt/target/
+
 
 # Streamlit
 ./visualisation

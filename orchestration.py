@@ -31,6 +31,20 @@ def load():
 
 
 @task
+def load_env_from_dotenv():
+    command = '''
+    Get-Content .env | ForEach-Object {
+        if ($_ -match "^\s*([^#][^=]+)=(.+)$") {
+            $name = $matches[1].Trim()
+            $value = $matches[2].Trim('"').Trim()
+            [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
+        }
+    }
+    '''
+    subprocess.run(["powershell", "-Command", command], check=True)
+
+
+@task
 def transform():
     logger.info("Initiating the DBT execution")
     try:
@@ -42,12 +56,8 @@ def transform():
             cwd="prague_apartments_dbt"
         )
         logger.info("DBT execution completed")
-        logger.debug(f"stdout:\n{result.stdout}")
-        logger.debug(f"stderr:\n{result.stderr}")
     except subprocess.CalledProcessError as e:
         logger.error(f"DBT failed with return code {e.returncode}")
-        logger.error(f"stdout:\n{e.stdout}")
-        logger.error(f"stderr:\n{e.stderr}")
         raise
 
 
@@ -60,15 +70,10 @@ def remove_csv():
 @flow
 def run_elt():
     extract()
+    load_env_from_dotenv()
     load()
     transform()
-    remove_csv()
+    #remove_csv()
 
 if __name__ == "__main__":
-    run_elt.deploy(
-        name="prague-apartments-pipeline",
-        work_pool_name="prague-apartments-pipeline",
-        image="prefecthq/prefect-client:3-python3.11",
-        push=False,
-        cron="0 6 * * *",
-    )
+    run_elt.serve(name="prague-apartments-pipeline", cron="0 6 * * *")

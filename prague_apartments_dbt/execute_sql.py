@@ -52,6 +52,7 @@ sql_insert_postgres = '''
 insert into prague_apartments (
     eventid, 
     title,
+    link,
     location, 
     district, 
     property_type, 
