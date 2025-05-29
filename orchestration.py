@@ -8,7 +8,7 @@ import os
 import sys
 
 #Logger setup
-logger = logging.getLogger()
+logger = get_run_logger()
 logger.setLevel(logging.INFO)
 
 
@@ -35,7 +35,9 @@ def transform():
             check=True,
             capture_output=True,
             text=True,
-            cwd="prague_apartments_dbt"
+            cwd="prague_apartments_dbt",
+            encoding="utf-8",
+            errors="replace"  
         )
         logger.info("DBT execution completed")
     except subprocess.CalledProcessError as e:
