@@ -5,18 +5,12 @@ from dotenv import load_dotenv
 import subprocess
 import logging
 import os
+import sys
 
 #Logger setup
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("elt.log"),
-        logging.StreamHandler()
-    ]
-)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
-logger = logging.getLogger(__name__)
 
 @task
 def extract():
