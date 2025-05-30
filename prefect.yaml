@@ -20,7 +20,7 @@ pull:
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
-- name: prague-apartments-pipeline
+- name: prague-apartments-pipeline-new
   version: null
   tags: []
   concurrency_limit: null
@@ -28,7 +28,7 @@ deployments:
   entrypoint: orchestration.py:run_elt
   parameters: {}
   work_pool:
-    name: prague-apartments-pipeline-new
+    name: apartments-elt
     work_queue_name: null
     job_variables: {}
   schedules:
