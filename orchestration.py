@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import subprocess
 import os
 
-@task
+@task(retries=3, retry_delay_seconds=5)
 def extract():
     logger = get_run_logger()
     try:
@@ -69,6 +69,6 @@ def remove_csv():
 def run_elt():
     extract()
     load()
-    
+
 if __name__ == "__main__":
     run_elt.serve(name="prague-apartments-pipeline-new", cron="0 6 * * *")
