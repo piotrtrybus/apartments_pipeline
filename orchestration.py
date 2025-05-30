@@ -71,6 +71,3 @@ def run_elt():
     load()
     transform()
     remove_csv()
-
-if __name__ == "__main__":
-    run_elt.serve(name="prague-apartments-pipeline-new", cron="0 6 * * *")
