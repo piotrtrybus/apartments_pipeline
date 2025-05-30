@@ -73,4 +73,10 @@ def run_elt():
     remove_csv()
 
 if __name__ == "__main__":
-    run_elt.serve(name="prague-apartments-pipeline-new", cron="0 6 * * *")
+    flow.from_source(
+        source="https://github.com/piotrtrybus/apartments_pipeline",
+        entrypoint="orchestration.py:run_elt",
+    ).deploy(
+        name="apartments-pipeline-elt",
+        work_pool_name="apartments-elt",
+    )
