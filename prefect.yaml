@@ -28,7 +28,7 @@ deployments:
   entrypoint: orchestration.py:run_elt
   parameters: {}
   work_pool:
-    name: prague-apartments-pipeline
+    name: prague-apartments-pipeline-new
     work_queue_name: null
     job_variables: {}
   schedules:
