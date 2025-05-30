@@ -71,3 +71,7 @@ def run_elt():
     load()
     transform()
     remove_csv()
+
+
+if __name__ == "__main__":
+    run_elt()
