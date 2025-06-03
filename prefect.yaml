@@ -18,6 +18,9 @@ pull:
     repository: https://github.com/piotrtrybus/apartments_pipeline
     branch: main
 
+dependencies:
+  - -r requirements.txt
+
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
 - name: prague-apartments-pipeline-new

@@ -74,4 +74,9 @@ def run_elt():
 
 
 if __name__ == "__main__":
-    run_elt()
+    run_elt.deploy(
+        name="prague-apartments-pipeline-new",
+        work_pool_name="apartments_elt",
+        image="piotrtrybus/apartments_pipeline:latest",
+        push=True
+    )
