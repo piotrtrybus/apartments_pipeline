@@ -31,7 +31,7 @@ deployments:
   entrypoint: orchestration.py:run_elt
   parameters: {}
   work_pool:
-    name: apartments-elt
+    name: apartments_elt
     work_queue_name: null
     job_variables: {}
   schedules:
