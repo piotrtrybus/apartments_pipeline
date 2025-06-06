@@ -1,82 +1,93 @@
 from prague_apartments_scraper.scraper import scrape_apartments
 from prague_apartments_ingestion.loader import load_data
-from prefect import flow, task, get_run_logger
+from dagster import op, job, RetryPolicy
 from dotenv import load_dotenv
 import subprocess
 import os
 
-@task(retries=3, retry_delay_seconds=5)
-def extract():
-    logger = get_run_logger()
+@op(retry_policy=RetryPolicy(max_retries=5, delay=10))
+def extract(context):
     try:
-        logger.info("Initiating the web scraper")
+        context.log.info("Initiating the web scraper")
         scrape_apartments()
-        logger.info("Web scraping completed")
+        context.log.info("Web scraping completed")
     except Exception as e:
-        logger.error(f"Scraping failed: {e}")
+        context.log.error(f"Scraping failed: {e}")
         raise
 
-@task
-def load():
-    logger = get_run_logger()
+@op
+def load(context):
     try:
-        logger.info("Initiating the Postgres load")
+        context.log.info("Initiating the Postgres load")
         load_data()
-        logger.info("Postgres load completed")
+        context.log.info("Postgres load completed")
     except Exception as e:
-        logger.error(f"Unable to load data: {e}")
+        context.log.error(f"Unable to load data: {e}")
         raise
 
 
-@task
-def transform():
-    logger = get_run_logger()
-    load_dotenv(dotenv_path="../prague_apartments_dbt/.env", override=True)
-    logger.info("Initiating the DBT execution")
+import dotenv
+import os
+
+@op
+def transform(context):
+    dotenv.load_dotenv(dotenv_path="../prague_apartments_dbt/.env", override=True)
+    context.log.info("Initiating the DBT execution")
+
     try:
+        context.log.info("Running DBT via PowerShell with .env loading")
+
+        ps_command = (
+                "& { "
+                "Get-Content ../prague_apartments_dbt/.env | "
+                "Where-Object { $_ -and ($_ -notmatch '^#') } | "
+                "ForEach-Object { "
+                "$name, $value = $_ -split '=', 2; "
+                "if ($name) { Set-Item -Path Env:\\$name -Value $value } "
+                "}; "
+                "dbt run --target prod "
+                "}"
+            )
+
+
         result = subprocess.run(
-            ["dbt", "run","--target","prod"],
-            check=True,
-            capture_output=True,
-            text=True,
-            cwd="prague_apartments_dbt",
-            encoding="utf-8",
-            errors="replace"  
-        )
-        logger.info("DBT execution completed")
-        logger.debug(f"DBT stdout:\n{result.stdout}")
-        logger.debug(f"DBT stderr:\n{result.stderr}")
+                ["powershell", "-Command", ps_command],
+                check=True,
+                capture_output=True,
+                text=True,
+                cwd="prague_apartments_dbt",
+                encoding="utf-8",
+                errors="replace"
+            )
+
+        context.log.info("DBT execution completed")
+
     except subprocess.CalledProcessError as e:
-        logger.error(f"DBT failed with return code {e.returncode}")
-        logger.error(f"stderr: {e.stderr}")
+        context.log.error(f"DBT failed with return code {e.returncode}")
+        context.log.error(f"stdout: {e.stdout}") 
+        context.log.error(f"stderr: {e.stderr}")
         raise
     except Exception as e:
-        logger.error(f"Unexpected error: {e}")
+        context.log.error(f"Unexpected error: {e}")
         raise
 
 
-@task
-def remove_csv():
-    logger = get_run_logger()
+
+@op
+def remove_csv(context):
     try:
-        logger.info("Removing file")
+        context.log.info("Removing file")
         os.remove("data/prague_apartments.csv")
     except Exception as e:
-        logger.error("Unable to remove CSV file")
+        context.log.info("Unable to remove CSV file")
         raise
 
-@flow
+@job
 def run_elt():
     extract()
     load()
     transform()
     remove_csv()
 
-
 if __name__ == "__main__":
-    run_elt.deploy(
-        name="prague-apartments-pipeline-new",
-        work_pool_name="apartments_elt",
-        image="piotrtrybus/apartments_pipeline:latest",
-        push=True
-    )
+    result = run_elt.execute_in_process()
