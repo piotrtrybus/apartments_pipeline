@@ -1,0 +1,6 @@
+load_from:
+  - git:
+      repo: "git@github.com:piotrtrybus/apartments_pipeline.git"
+      branch: "feature/dagster_orchestration"
+      subpath: "/"
+    python_module: "repository"

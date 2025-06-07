@@ -1,6 +1,6 @@
 from prague_apartments_scraper.scraper import scrape_apartments
 from prague_apartments_ingestion.loader import load_data
-from dagster import op, job, RetryPolicy
+from dagster import op,job,RetryPolicy
 from dotenv import load_dotenv
 import subprocess
 import os
@@ -24,10 +24,6 @@ def load(context):
     except Exception as e:
         context.log.error(f"Unable to load data: {e}")
         raise
-
-
-import dotenv
-import os
 
 @op
 def transform(context):
