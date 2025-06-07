@@ -28,44 +28,23 @@ def load(context):
 @op
 def transform(context):
     dotenv.load_dotenv(dotenv_path="../prague_apartments_dbt/.env", override=True)
-    context.log.info("Initiating the DBT execution")
-
+    env = os.environ.copy()
     try:
-        context.log.info("Running DBT via PowerShell with .env loading")
-
-        ps_command = (
-                "& { "
-                "Get-Content ../prague_apartments_dbt/.env | "
-                "Where-Object { $_ -and ($_ -notmatch '^#') } | "
-                "ForEach-Object { "
-                "$name, $value = $_ -split '=', 2; "
-                "if ($name) { Set-Item -Path Env:\\$name -Value $value } "
-                "}; "
-                "dbt run --target prod "
-                "}"
-            )
-
-
         result = subprocess.run(
-                ["powershell", "-Command", ps_command],
+                ["dbt", "run", "--target", "prod"],
                 check=True,
                 capture_output=True,
                 text=True,
                 cwd="prague_apartments_dbt",
-                encoding="utf-8",
-                errors="replace"
+                env=env
             )
-
         context.log.info("DBT execution completed")
-
     except subprocess.CalledProcessError as e:
         context.log.error(f"DBT failed with return code {e.returncode}")
-        context.log.error(f"stdout: {e.stdout}") 
+        context.log.error(f"stdout: {e.stdout}")
         context.log.error(f"stderr: {e.stderr}")
         raise
-    except Exception as e:
-        context.log.error(f"Unexpected error: {e}")
-        raise
+
 
 
 
