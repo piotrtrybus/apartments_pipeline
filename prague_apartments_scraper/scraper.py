@@ -165,8 +165,6 @@ def scrape_data():
         
             extract_apartments()
             logger.info("Apartments extracted")
-
-            break
             
             try:
                 next_page_button = page.locator("button",has_text="Další stránka")

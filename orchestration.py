@@ -27,7 +27,7 @@ def load(context):
 
 @op
 def transform(context):
-    dotenv.load_dotenv(dotenv_path="prague_apartments_dbt/.env", override=True)
+    load_dotenv(dotenv_path="prague_apartments_dbt/.env", override=True)
     env = os.environ.copy()
     try:
         result = subprocess.run(
