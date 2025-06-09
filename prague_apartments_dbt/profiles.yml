@@ -10,7 +10,7 @@ prague_apartments:
       schema: "{{ env_var('SCHEMA', 'public') }}"
       connect_timeout: 10
       threads: 1
-      sslmode: require
+      sslmode: prefer
    prod:
       type: postgres
       host: "{{ env_var('HOST') }}"
@@ -21,5 +21,5 @@ prague_apartments:
       schema: "{{ env_var('PROD_SCHEMA', 'public') }}"
       connect_timeout: 10
       threads: 1
-      sslmode: require
+      sslmode: prefer
   target: dev
